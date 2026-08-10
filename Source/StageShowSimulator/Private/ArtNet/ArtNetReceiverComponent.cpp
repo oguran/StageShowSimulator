@@ -110,6 +110,12 @@ bool UArtNetReceiverComponent::InitializeSocket()
 {
   ShutdownSocket();
 
+  if (Port < 1 || Port > 65535)
+  {
+    UE_LOG(LogStageShowSimulator, Error, TEXT("Invalid Art-Net UDP port: %d (expected 1..65535)"), Port);
+    return false;
+  }
+
  FIPv4Address ParsedAddress;
   if (!FIPv4Address::Parse(BindAddress, ParsedAddress))
   {
@@ -146,3 +152,15 @@ void UArtNetReceiverComponent::ShutdownSocket()
     ReceiveSocket = nullptr;
   }
 }
+
+#if WITH_DEV_AUTOMATION_TESTS
+void UArtNetReceiverComponent::SetLatestFrameForTesting(const FArtNetDmxFrame& InFrame)
+{
+  LatestFrames.Add(InFrame.Universe, InFrame);
+}
+
+bool UArtNetReceiverComponent::ShouldAcceptUniverseForTesting(int32 InUniverse) const
+{
+  return UniverseFilter < 0 || InUniverse == UniverseFilter;
+}
+#endif

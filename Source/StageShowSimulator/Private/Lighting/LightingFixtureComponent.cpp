@@ -5,6 +5,7 @@
 #include "ArtNet/ArtNetReceiverComponent.h"
 #include "Components/LightComponent.h"
 #include "GameFramework/Actor.h"
+#include "StageShowSimulatorLog.h"
 
 ULightingFixtureComponent::ULightingFixtureComponent()
 {
@@ -18,6 +19,11 @@ void ULightingFixtureComponent::BeginPlay()
   if (AActor* Owner = GetOwner())
   {
     TargetLight = Owner->FindComponentByClass<ULightComponent>();
+
+    if (Receiver == nullptr)
+    {
+      Receiver = Owner->FindComponentByClass<UArtNetReceiverComponent>();
+    }
   }
 }
 
@@ -25,10 +31,27 @@ void ULightingFixtureComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
   Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-  if (Receiver == nullptr || TargetLight == nullptr)
+  if (Receiver == nullptr)
   {
+    if (!bLoggedMissingReceiver)
+    {
+      UE_LOG(LogStageShowSimulator, Warning, TEXT("Receiver is null."));
+      bLoggedMissingReceiver = true;
+    }
     return;
   }
+  bLoggedMissingReceiver = false;
+
+  if (TargetLight == nullptr)
+  {
+    if (!bLoggedMissingTargetLight)
+    {
+      UE_LOG(LogStageShowSimulator, Warning, TEXT("TargetLight is null."));
+      bLoggedMissingTargetLight = true;
+    }
+    return;
+  }
+  bLoggedMissingTargetLight = false;
 
   int32 ChannelValue = 0;
   if (!Receiver->GetChannelValue(Universe, IntensityChannel, ChannelValue))

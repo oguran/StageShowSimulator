@@ -34,4 +34,6 @@ public:
 
 private:
   TObjectPtr<ULightComponent> TargetLight = nullptr;
+  bool bLoggedMissingReceiver = false;
+  bool bLoggedMissingTargetLight = false;
 };

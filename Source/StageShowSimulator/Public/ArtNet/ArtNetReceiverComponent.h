@@ -30,7 +30,7 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ArtNet")
   FString BindAddress = TEXT("127.0.0.1");
 
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ArtNet")
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ArtNet", meta=(ClampMin="1", ClampMax="65535"))
   int32 Port = 6454;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ArtNet")
@@ -43,4 +43,10 @@ private:
 
   bool InitializeSocket();
   void ShutdownSocket();
+
+#if WITH_DEV_AUTOMATION_TESTS
+public:
+  void SetLatestFrameForTesting(const FArtNetDmxFrame& InFrame);
+  bool ShouldAcceptUniverseForTesting(int32 InUniverse) const;
+#endif
 };
