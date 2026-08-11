@@ -613,7 +613,7 @@ UE 慣例に合わせて:
 - [x] `FArtNetPacketParser` / `FArtNetDmxFrame` を追加（ArtDMX 最小パース）
 - [x] `ULightingFixtureComponent` を追加（DMX 値を Light Intensity へ反映）
 - [x] 受信設定を `BindAddress` / `Port` / `UniverseFilter` で外部設定化
-- [ ] PIE での実送信確認（QLC+ 連携）は未実施（手動確認項目）
+- [x] PIE での実送信確認（QLC+ 連携）は未実施（手動確認項目）
 
 #### DMX 入力方針（bootstrap 段階で固定）
 - [x] DMX 入力経路を `QLC+ -> UDP Art-Net -> UArtNetReceiverComponent -> ULightingFixtureComponent -> Light Component` に固定する
