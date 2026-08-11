@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "timeUnit": "seconds",
+  "positionUnit": "meter",
+  "rotationUnit": "degree",
+  "samples": [
+    {
+      "time": 0.0,
+      "x": 0.0,
+      "y": 0.0,
+      "yaw": 0.0
+    },
+    {
+      "time": 2.0,
+      "x": 1.0,
+      "y": 0.0,
+      "yaw": 45.0
+    },
+    {
+      "time": 4.0,
+      "x": 1.0,
+      "y": 1.0,
+      "yaw": 90.0
+    },
+    {
+      "time": 6.0,
+      "x": 0.0,
+      "y": 1.0,
+      "yaw": 180.0
+    },
+    {
+      "time": 8.0,
+      "x": 0.0,
+      "y": 0.0,
+      "yaw": 0.0
+    }
+  ]
+}

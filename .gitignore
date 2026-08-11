@@ -6,9 +6,9 @@ Saved/
 .idea/
 *.VC.db
 *.opensdf
-*.s*f
+*.sdf
 *.suo
-*.user
-*.user*refs
+*.use*
+*.userprefs
 *.tmp
 *.log
