@@ -20,67 +20,90 @@ void UShowClockComponent::BeginPlay()
 void UShowClockComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
   Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-  AdvanceTime(DeltaTime);
+  AdvanceTime(static_cast<double>(DeltaTime));
 }
 
 
-void UShowClockComponent::AdvanceTime(float DeltaTimeSeconds)
+void UShowClockComponent::AdvanceTime(double DeltaTimeSeconds)
 {
-  if (!bPlaying)
+  if (State != EShowClockState::Playing)
   {
     return;
   }
 
   CurrentTimeSeconds = ClampTime(CurrentTimeSeconds + (DeltaTimeSeconds * PlaybackRate));
 
-  if (PlaybackLengthSeconds > 0.0f && CurrentTimeSeconds >= PlaybackLengthSeconds)
+  if (PlaybackLengthSeconds > 0.0 && CurrentTimeSeconds >= PlaybackLengthSeconds)
   {
-    bPlaying = false;
+    State = EShowClockState::Paused;
   }
 }
 
 void UShowClockComponent::Play()
 {
-  if (PlaybackLengthSeconds > 0.0f && CurrentTimeSeconds >= PlaybackLengthSeconds)
+  if (PlaybackLengthSeconds > 0.0 && CurrentTimeSeconds >= PlaybackLengthSeconds)
   {
-    CurrentTimeSeconds = 0.0f;
+    CurrentTimeSeconds = 0.0;
   }
 
-  bPlaying = true;
+  State = EShowClockState::Playing;
 }
 
 void UShowClockComponent::Pause()
 {
-  bPlaying = false;
+  if (State == EShowClockState::Playing || State == EShowClockState::Seeking)
+  {
+    State = EShowClockState::Paused;
+  }
 }
 
 void UShowClockComponent::Stop()
 {
-  bPlaying = false;
-  CurrentTimeSeconds = 0.0f;
+  CurrentTimeSeconds = 0.0;
+  State = EShowClockState::Stopped;
 }
 
-void UShowClockComponent::Seek(float InTimeSeconds)
+void UShowClockComponent::Seek(double InTimeSeconds)
 {
+  const EShowClockState PreviousState = State;
+  State = EShowClockState::Seeking;
   CurrentTimeSeconds = ClampTime(InTimeSeconds);
+
+  if (PreviousState == EShowClockState::Playing)
+  {
+    State = EShowClockState::Playing;
+  }
+  else if (CurrentTimeSeconds <= 0.0)
+  {
+    State = EShowClockState::Stopped;
+  }
+  else
+  {
+    State = EShowClockState::Paused;
+  }
 }
 
-float UShowClockComponent::GetCurrentTimeSeconds() const
+double UShowClockComponent::GetCurrentTimeSeconds() const
 {
   return CurrentTimeSeconds;
 }
 
 bool UShowClockComponent::IsPlaying() const
 {
-  return bPlaying;
+  return State == EShowClockState::Playing;
 }
 
-float UShowClockComponent::ClampTime(float InTimeSeconds) const
+EShowClockState UShowClockComponent::GetState() const
 {
-  if (PlaybackLengthSeconds <= 0.0f)
+  return State;
+}
+
+double UShowClockComponent::ClampTime(double InTimeSeconds) const
+{
+  if (PlaybackLengthSeconds <= 0.0)
   {
-    return FMath::Max(0.0f, InTimeSeconds);
+    return FMath::Max(0.0, InTimeSeconds);
   }
 
-  return FMath::Clamp(InTimeSeconds, 0.0f, PlaybackLengthSeconds);
+  return FMath::Clamp(InTimeSeconds, 0.0, PlaybackLengthSeconds);
 }

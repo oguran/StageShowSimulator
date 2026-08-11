@@ -14,6 +14,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FRobotPoseInterpolationTest, "StageShowSimulato
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FRobotPoseBoundaryTest, "StageShowSimulator.RobotPose.Boundary", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FRobotPoseShortestYawInterpolationTest, "StageShowSimulator.RobotPose.ShortestYawInterpolation", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FRobotPoseJsonPathValidationTest, "StageShowSimulator.RobotPose.JsonPathValidation", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FRobotPoseUnitConversionTest, "StageShowSimulator.RobotPose.UnitConversion", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FRobotPoseJsonValidationTest::RunTest(const FString& Parameters)
 {
@@ -118,6 +119,30 @@ bool FRobotPoseJsonPathValidationTest::RunTest(const FString& Parameters)
 
   Error.Empty();
   TestTrue(TEXT("Relative project path should load successfully"), URobotPoseLoader::LoadPoseTrackFromJsonFile(RelativePath, Track, Error));
+
+  PlatformFile.DeleteFile(*AbsolutePath);
+  return true;
+}
+
+bool FRobotPoseUnitConversionTest::RunTest(const FString& Parameters)
+{
+  const FString RelativePath = TEXT("Saved/Tests/RobotPoseUnitConversionTest.json");
+  const FString AbsolutePath = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir(), RelativePath);
+  IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+  PlatformFile.CreateDirectoryTree(*FPaths::GetPath(AbsolutePath));
+
+  const FString JsonText = TEXT("{\"samples\":[{\"time\":0.0,\"x\":1.0,\"y\":2.0,\"yaw\":0.0}]}");
+  TestTrue(TEXT("Unit conversion test JSON should be created"), FFileHelper::SaveStringToFile(JsonText, *AbsolutePath));
+
+  FRobotPoseTrack Track;
+  FString Error;
+  const bool bLoaded = URobotPoseLoader::LoadPoseTrackFromJsonFile(RelativePath, Track, Error);
+  TestTrue(TEXT("Track should load successfully"), bLoaded);
+  if (bLoaded)
+  {
+    TestTrue(TEXT("X should convert meter to centimeter"), Track.Samples[0].Position2D.X == 100.0f);
+    TestTrue(TEXT("Y should convert meter to centimeter"), Track.Samples[0].Position2D.Y == 200.0f);
+  }
 
   PlatformFile.DeleteFile(*AbsolutePath);
   return true;

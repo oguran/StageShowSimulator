@@ -1,4 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Robot/RobotPoseLoader.h"
 
@@ -8,6 +9,11 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 #include "StageShowSimulatorLog.h"
+
+namespace
+{
+  constexpr float MetersToCentimeters = 100.0f;
+}
 
 bool URobotPoseLoader::LoadPoseTrackFromJsonFile(const FString& JsonFilePath, FRobotPoseTrack& OutTrack, FString& OutError)
 {
@@ -92,7 +98,7 @@ bool URobotPoseLoader::LoadPoseTrackFromJsonFile(const FString& JsonFilePath, FR
 
     FRobotPoseSample Sample;
     Sample.TimeSeconds = TimeSeconds;
-    Sample.Position2D = FVector2D(static_cast<float>(X), static_cast<float>(Y));
+    Sample.Position2D = FVector2D(static_cast<float>(X) * MetersToCentimeters, static_cast<float>(Y) * MetersToCentimeters);
     Sample.YawDegrees = static_cast<float>(YawDegrees);
     OutTrack.Samples.Add(Sample);
   }
