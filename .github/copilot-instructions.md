@@ -56,3 +56,25 @@ The following functions are required:
 - Add tests for time seeking and boundary conditions.
 - Tests must not depend on actual DMX hardware.
 - Tests must not depend on an MP4 decoder.
+
+## Workspace scope
+
+Authoritative project sources:
+
+- Source/
+- Config/
+- Docs/
+- StageShowSimulator.uproject
+- .github/copilot-instructions.md
+
+Do not use the following directories as authoritative sources:
+
+- Intermediate/
+- Binaries/
+- Saved/
+- DerivedDataCache/
+- .vs/
+
+Content/ contains Unreal binary assets.
+Do not attempt to parse or modify uasset or umap files.
+Use Docs/AssetInventory.md for asset structure and assignments.
