@@ -132,6 +132,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97}"
 	ProjectSection(SolutionItems) = preProject
 		Docs\Plans\01_ProjectBootstrap.md = Docs\Plans\01_ProjectBootstrap.md
+		Docs\Plans\04_MediaPlayback.md = Docs\Plans\04_MediaPlayback.md
 		Docs\Architecture.md = Docs\Architecture.md
 		Docs\AssetInventory.md = Docs\AssetInventory.md
 		Docs\TestResults\BootstrapManualTest.md = Docs\TestResults\BootstrapManualTest.md

@@ -13,6 +13,7 @@ public class StageShowSimulator : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine",
+      "MediaAssets",
 			"InputCore",
 			"EnhancedInput",
 			"Json",
