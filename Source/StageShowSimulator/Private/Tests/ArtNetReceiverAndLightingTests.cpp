@@ -1,4 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -7,6 +8,7 @@
 #include "Lighting/LightingFixtureComponent.h"
 #include "Components/PointLightComponent.h"
 #include "GameFramework/Actor.h"
+#include "Tests/AutomationCommon.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FArtNetReceiverChannelIndexingTest, "StageShowSimulator.ArtNet.Receiver.ChannelIndexing", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FArtNetReceiverUniverseFilterTest, "StageShowSimulator.ArtNet.Receiver.UniverseFilter", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -63,7 +65,21 @@ bool FArtNetReceiverUniverseFilterTest::RunTest(const FString& Parameters)
 
 bool FLightingFixtureReceiverAutoDiscoveryTest::RunTest(const FString& Parameters)
 {
-  AActor* Owner = NewObject<AActor>();
+  FTestWorldWrapper TestWorld;
+  if (!TestWorld.CreateTestWorld(EWorldType::Game))
+  {
+    TestWorld.ForwardErrorMessages(this);
+    return false;
+  }
+
+  UWorld* World = TestWorld.GetTestWorld();
+  TestNotNull(TEXT("Test world should be created"), World);
+  if (World == nullptr)
+  {
+    return false;
+  }
+
+  AActor* Owner = World->SpawnActor<AActor>();
   TestNotNull(TEXT("Owner actor should be created"), Owner);
   if (Owner == nullptr)
   {
@@ -82,14 +98,26 @@ bool FLightingFixtureReceiverAutoDiscoveryTest::RunTest(const FString& Parameter
     return false;
   }
 
-  Owner->AddOwnedComponent(Receiver);
-  Owner->AddOwnedComponent(PointLight);
-  Owner->AddOwnedComponent(Lighting);
+  Owner->AddInstanceComponent(Receiver);
+  Owner->AddInstanceComponent(PointLight);
+  Owner->AddInstanceComponent(Lighting);
+
+  Receiver->RegisterComponent();
+  PointLight->RegisterComponent();
+  Lighting->RegisterComponent();
 
   Lighting->Receiver = nullptr;
-  Lighting->BeginPlay();
+
+  if (!TestWorld.BeginPlayInTestWorld())
+  {
+    TestWorld.ForwardErrorMessages(this);
+    Owner->Destroy();
+    return false;
+  }
 
   TestEqual(TEXT("Lighting fixture should auto-discover receiver from owner"), Lighting->Receiver.Get(), Receiver);
+
+  Owner->Destroy();
   return true;
 }
 
