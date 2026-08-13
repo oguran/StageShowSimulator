@@ -142,7 +142,16 @@ bool ULedMediaPlaybackComponent::SeekMedia(double InTimeSeconds)
 
   const double DurationSeconds = GetDurationSeconds();
   const double ClampedTimeSeconds = StageShowSimulatorMediaPlayback::ClampSeekTimeSeconds(InTimeSeconds, DurationSeconds);
-  return MediaPlayer->Seek(FTimespan::FromSeconds(ClampedTimeSeconds));
+  const bool bSeekResult = MediaPlayer->Seek(FTimespan::FromSeconds(ClampedTimeSeconds));
+  UE_LOG(
+    LogStageShowSimulator,
+    Display,
+    TEXT("LedMediaPlaybackComponent: SeekMedia Input=%.6f Duration=%.6f Clamped=%.6f Result=%s"),
+    InTimeSeconds,
+    DurationSeconds,
+    ClampedTimeSeconds,
+    bSeekResult ? TEXT("true") : TEXT("false"));
+  return bSeekResult;
 }
 
 void ULedMediaPlaybackComponent::SetMediaPlayer(UMediaPlayer* NewMediaPlayer)
