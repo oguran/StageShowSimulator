@@ -357,3 +357,56 @@ Unreal Automation Test Frameworki`IMPLEMENT_SIMPLE_AUTOMATION_TEST` “™j‚ğg—p‚
 - uasset‚Ì¶¬E•ÏXi`UMediaSource`, `UMediaPlayer`, `UMediaTexture` ‚ÍEditor‚Ål‚ªì¬‚·‚éjB
 - Media‰¹—ÊEƒtƒF[ƒh§ŒäB
 - •¡”MediaPlayer/•¡”LED Display‚Ì“¯ŠÇ—i¡‰ñ‚Í’PˆêComponent=’PˆêMediaPlayer‚Ì‘O’ñjB
+
+---
+
+## 23. À‘•‚¨‚æ‚Ñó“üŒ‹‰Ê
+
+### C++À‘•
+
+- MediaAssetsˆË‘¶’Ç‰Á: Š®—¹
+- ULedMediaPlaybackComponent: Š®—¹
+- MediaPlayer‚¨‚æ‚ÑMediaSourceŠO•”Š„‚è“–‚Ä: Š®—¹
+- OnMediaOpened‚¨‚æ‚ÑOnMediaOpenFailed: Š®—¹
+- Delegate“o˜^‚¨‚æ‚Ñ‰ğœ: Š®—¹
+- OpenAPlayAPauseAStopASeek: Š®—¹
+- MediaTime‚¨‚æ‚ÑDurationæ“¾: Š®—¹
+- Missing Mediaİ’è‚ÌˆÀ‘Sˆ—: Š®—¹
+- ƒ[ƒJƒ‹â‘ÎƒpƒX‚ğƒƒO‚Öo‚³‚È‚¢‘Î‰: Š®—¹
+
+### ƒrƒ‹ƒh‚¨‚æ‚Ñ©“®ƒeƒXƒg
+
+- Development Editor / Win64: ¬Œ÷
+- Build warnings: 0
+- Build errors: 0
+- Lighting tests: 1Œ¬Œ÷
+- Media tests: 13Œ¬Œ÷
+- StageShowSimulator tests: 24Œ¬Œ÷
+- Automation Test Exit Code: 0
+
+### è“®ó“üƒeƒXƒg
+
+ˆÈ‰º‚ğ‚·‚×‚ÄŠm”F‚µA‡Ši‚µ‚½B
+
+- bOpenOnBeginPlay‚É‚æ‚éOpen
+- bIsOpenPending‚Ìó‘Ô‘JˆÚ
+- OnMediaOpenedŒã‚ÌbIsOpened
+- LED–Ê‚Ö‚Ì‰f‘œ•\¦
+- Play
+- Pause
+- Stop
+- Seek
+- •‰‚ÌSeek
+- Duration’´‰ßSeek
+- MediaSource–¢İ’è‚ÌˆÀ‘S“®ì
+- PIEI—¹‚ÌˆÀ‘S“®ì
+- PIEÄÀs
+- –³‰¹Ä¶
+
+Ú×‚ÍDocs/TestResults/04_MediaPlayback_ManualTest.md‚ğQÆ‚·‚éB
+
+### ó“ü”»’è
+
+Standalone Media Playback’iŠK‚ÍAccepted‚Æ‚·‚éB
+
+ShowClock“¯ŠúAMedia Drift•â³A‰¹º§Œä‚ÍŒã‘±’iŠK‚Ì‘ÎÛ‚Æ‚·‚éB
